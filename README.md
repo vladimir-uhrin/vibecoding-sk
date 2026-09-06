@@ -51,6 +51,7 @@ MCP je štandard, cez ktorý AI vie siahnuť na tvoje nástroje — databázu, s
 
 Sem hádžem repá, ktoré týždeň čo týždeň vystrelia. Overte si sami, či sa hodia na to čo robíte.
 
+- **[M3E Canvas](nastroje/m3e-canvas.md)** — naklikáš rozhranie v prehliadači a dostaneš z neho podrobný prompt pre Claude Code, Codex, Cursor alebo Gemini CLI. Overené 6. 9. 2026.
 - **[obra/superpowers](https://github.com/obra/superpowers)** — sada schopností (skills) pre Claude Code.
 - **[usestrix/strix](https://github.com/usestrix/strix)** — open-source AI agent na hľadanie dier v bezpečnosti kódu.
 - **[JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)** — skráti prompty tak, že AI "hovorí ako jaskyniar", a ušetrí tokeny.
