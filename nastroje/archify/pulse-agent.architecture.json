@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Ako PULSE agent hľadá témy",
+    "output": "pulse-agent.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "zber-a-vyber",
+        "label": "Od zdroja po námet",
+        "focus": ["github", "youtube", "web", "repo-scan", "video-scan", "story-scan", "ranker", "db", "telegram"],
+        "note": "Sleduj cestu signálu od verejného zdroja až po upozornenie na tému."
+      },
+      {
+        "id": "overenie",
+        "label": "Čo sa ukladá a overuje",
+        "focus": ["repo-scan", "video-scan", "story-scan", "ranker", "db"],
+        "note": "Každý signál prejde meraním rastu, porovnaním zdrojov a uložením histórie."
+      }
+    ]
+  },
+  "components": [
+    { "id": "github", "type": "external", "label": "GitHub", "sublabel": "trendy, hviezdy, releasy", "pos": [35, 105], "size": [145, 66] },
+    { "id": "youtube", "type": "external", "label": "YouTube", "sublabel": "videá, pozretia, rast", "pos": [35, 275], "size": [145, 66] },
+    { "id": "web", "type": "external", "label": "Web a komunity", "sublabel": "HN, Reddit, DEV, RSS", "pos": [35, 445], "size": [145, 66] },
+
+    { "id": "repo-scan", "type": "backend", "label": "Repo scanner", "sublabel": "rast a nové projekty", "pos": [285, 105], "size": [155, 66] },
+    { "id": "video-scan", "type": "backend", "label": "Video scanner", "sublabel": "rýchlosť pozretí", "pos": [285, 275], "size": [155, 66] },
+    { "id": "story-scan", "type": "backend", "label": "Story scanner", "sublabel": "skóre a diskusia", "pos": [285, 445], "size": [155, 66] },
+
+    { "id": "ranker", "type": "backend", "label": "Trend ranker", "sublabel": "spája viac signálov", "pos": [545, 275], "size": [165, 70], "tag": "praktickosť + rast" },
+    { "id": "db", "type": "database", "label": "História", "sublabel": "SQLite / sql.js", "pos": [545, 445], "size": [165, 66] },
+    { "id": "telegram", "type": "messagebus", "label": "Telegram", "sublabel": "upozornenie na trend", "pos": [825, 275], "size": [160, 70] },
+    { "id": "content", "type": "external", "label": "Overený obsah", "sublabel": "FB post, návod, video", "pos": [825, 445], "size": [160, 70] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Docker: pulse-agent", "wraps": ["repo-scan", "video-scan", "story-scan", "ranker", "db"] }
+  ],
+  "connections": [
+    { "id": "github-repo", "from": "github", "to": "repo-scan", "label": "API + Trending", "variant": "emphasis" },
+    { "id": "youtube-video", "from": "youtube", "to": "video-scan", "label": "RSS + metriky", "variant": "emphasis" },
+    { "id": "web-story", "from": "web", "to": "story-scan", "label": "RSS + JSON", "variant": "emphasis" },
+    { "id": "repo-ranker", "from": "repo-scan", "to": "ranker", "label": "rast hviezd", "fromSide": "right", "toSide": "left" },
+    { "id": "video-ranker", "from": "video-scan", "to": "ranker", "label": "views/h", "fromSide": "right", "toSide": "left", "labelAt": [520, 278] },
+    { "id": "story-ranker", "from": "story-scan", "to": "ranker", "label": "skóre", "fromSide": "right", "toSide": "left" },
+    { "id": "ranker-db", "from": "ranker", "to": "db", "label": "uloží históriu", "fromSide": "bottom", "toSide": "top", "labelAt": [628, 359] },
+    { "id": "ranker-alert", "from": "ranker", "to": "telegram", "label": "iba silný signál", "variant": "emphasis" },
+    { "id": "telegram-content", "from": "telegram", "to": "content", "label": "ručné overenie", "fromSide": "bottom", "toSide": "top", "labelAt": [905, 359] }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Čo sleduje", "items": ["Rast repozitárov, nie iba celkový počet hviezd", "Rýchlosť pozretí čerstvých videí", "Diskusiu na HN, Reddite, DEV a v RSS"] },
+    { "dot": "emerald", "title": "Prečo je to užitočné", "items": ["Jedna téma musí mať viac než jeden signál", "História odhalí zrýchlenie aj jednorazový hype", "Výstup je námet na vlastný test, nie skopírovaný článok"] },
+    { "dot": "amber", "title": "Čo automat nerobí", "items": ["Neuverejňuje bez kontroly", "Neberie počet hviezd ako dôkaz kvality", "Nenahrádza reálne vyskúšanie nástroja"] }
+  ]
+}
